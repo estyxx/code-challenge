@@ -7,6 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+django = "^5.0.6"
+django-environ = "^0.11.2"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.2.0"
@@ -15,6 +17,7 @@ factory-boy = "^3.3.0"
 pytest-factoryboy = "^2.7.0"
 pytest-xdist = "^3.6.1"
 pytest-icdiff = "^0.9"
+pytest-django = "^4.8.0"
 
 [tool.poetry.group.linters.dependencies]
 ruff = "^0.4.4"
@@ -38,6 +41,12 @@ select = [
     "PT", # flake8-pytest-style
 
 ]
+
+[tool.pytest.ini_options]
+# @link https://pytest-django.readthedocs.io/en/latest/usage.html
+DJANGO_SETTINGS_MODULE = "challenge.settings.test"
+addopts = "-l -s -vv --cov=challenge --cov-report=term --cov-report=html --no-cov-on-fail "
+testpaths = ["challenge/*/tests/**/*.py"]
 
 [tool.coverage.run]
 branch = true
