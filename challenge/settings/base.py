@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "challenge.users",
+    "challenge.energy",
 ]
 
 MIDDLEWARE = [

@@ -1,9 +1,8 @@
 import factory
+from django.conf import settings
 from factory import Faker
 from factory.django import DjangoModelFactory
 from pytest_factoryboy import register
-
-from challenge.users.models import User
 
 
 @register
@@ -21,5 +20,5 @@ class UserFactory(DjangoModelFactory):
             instance.save()
 
     class Meta:
-        model = User
+        model = settings.AUTH_USER_MODEL
         django_get_or_create = ["email"]
