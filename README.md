@@ -109,3 +109,34 @@ When reviewing your submission, we’ll be considering these aspects:
 
 - Maintainability - for example, how easy would it be for another developer to take over the project and start adding features
 - Robustness - are errors handled gracefully?
+
+# Areas for Improvement (If Given More Time):
+
+- Testing:
+
+  While there are a few tests, they are not comprehensive. Specifically, more tests are needed for checking if a file has already been imported (I implemented a feature to save a record in the database and allow users to re-execute the same file-content only if it was not successful)
+
+- Flow file Logging:
+
+  Currently, I save a record in the database for the content-file name and whether it has been executed. It would be better to have this as a Foreign Key in the Reading model (currently, it just saves the file name). This would be useful for reproducing bugs/errors in the imports.
+  Additionally, it would be good to evaluate if we need to log all files, including those that are not supported.
+
+- Code Refactoring:
+
+  The file logging logic in Abstract.log_import() should be refactored into a decorator or superclass to ensure consistent logging for all file imports.
+
+- Documentation:
+
+  While I added some comments and docstrings, I didn’t pay enough attention to the format and clarity due to time constraints. Writing better docstrings overall would improve the maintainability of the code.
+
+- Header and Footer Fields:
+  Investigating the meaning of Header and Footer fields further and potentially storing them in their own fields for convenience would help users who interact with the Admin interface.
+- File Storage:
+  Depending on the file sizes in production, it might be beneficial to move the content to an S3 bucket to reduce the database size.
+- Indexing:
+
+  I realized that I forgot to add some indexes, especially in the Reading table. While Django automatically indexes foreign keys, other fields might benefit from indexing depending on the searches performed.
+
+- Flow Import Register:
+
+  Given that there are many of these flows, I created a simple dictionary to match the flow name-version to the corresponding class for import. This could be improved by dynamically creating the register from the defined classes in the modules, leveraging Python's capabilities for a more automated approach.
