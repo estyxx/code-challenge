@@ -12,7 +12,6 @@ pytestmark = pytest.mark.django_db
 
 
 class TestCommandImportFlow:
-
     def test_happy_path(self, valid_uff_file):
         out = StringIO()
 

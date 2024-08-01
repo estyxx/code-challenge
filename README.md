@@ -16,7 +16,21 @@ To create a superuser account, use this command:
 
 ### Running tests
 
-    pytest
+    poetry run pytest
+
+### Run the server
+
+    poetry run python manage.py runserver
+
+    then go to [https://localhost:8000/admin](https://localhost:8000/admin)
+
+### Run the command to import the Flow D0010 file
+
+    poetry run python manage.py import_flow ./DTC5259515123502080915D0010.uff
+
+usage: manage.py import_flow [-h] file
+
+Imports flow files. (Supported only D0010)
 
 ## Requirements of the challenge
 
