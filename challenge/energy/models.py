@@ -42,7 +42,7 @@ class MeterPoint(models.Model):
                     "validation_status": _(
                         f"Invalid ValidationStatus: {self.validation_status}. "
                         "(Allowed: "
-                        "{', '.join([i.value for i in self.ValidationStatus])})"
+                        f"{', '.join([i.value for i in self.ValidationStatus])})"
                     )
                 }
             )
@@ -163,7 +163,7 @@ class Reading(models.Model):
         null=True,
         blank=True,
     )
-    number_md_resets = models.PositiveSmallIntegerField(
+    md_resets_number = models.PositiveSmallIntegerField(
         _("Number of MD Resets"),
         help_text=_(
             "The number of times that the Maximum Demand Indicator has been reset."
@@ -181,6 +181,8 @@ class Reading(models.Model):
         max_length=1,
         help_text=_("Indicates how the meter reading was obtained"),
     )
+
+    # TODO: add ForeignKey with ImportFlowFiles table
     flow_file = models.CharField(
         verbose_name=_("Flow File"),
         max_length=100,
@@ -192,6 +194,12 @@ class Reading(models.Model):
     meter = models.ForeignKey(
         Meter,
         verbose_name=_("Meter"),
+        on_delete=models.CASCADE,
+        related_name="readings",
+    )
+    meter_point = models.ForeignKey(
+        MeterPoint,
+        verbose_name=_("Meter Point"),
         on_delete=models.CASCADE,
         related_name="readings",
     )
@@ -220,12 +228,18 @@ class Reading(models.Model):
                 }
             )
 
+        if self.register_reading < 0:
+            raise ValidationError(
+                {"register_reading": _("Register reading must be a positive number.")}
+            )
+
     def save(self, *args, **kwargs) -> None:
         self.clean()
         super().save(*args, **kwargs)
 
 
-class Import(models.Model):
+class FlowImportFiles(models.Model):
+    # TODO: add header and footer fields that are in the files for convenience?
     imported_at = models.DateTimeField(
         _("Import Date & Time"),
         help_text=_("The date and time at which a file has been imported"),
@@ -238,3 +252,9 @@ class Import(models.Model):
     content = models.TextField(
         _("File Content"), help_text=_("Content of the imported file")
     )
+
+    successful = models.BooleanField(_("Successful import flag"), default=False)
+
+    def mark_flow_succesful(self) -> None:
+        self.successful = True
+        self.save()

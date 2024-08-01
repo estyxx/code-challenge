@@ -86,3 +86,23 @@ the only thing is theat the command will search for a fisical file in the local 
 
 need to open the content , get the first line and the flow reference and version and check if it's supported
 would be cool doing it in python just match if there is the class DOO10OO2 and it's done...
+
+## Format of the file discrepancy...
+
+This is the format taht according to the documentation the 030 line should have:
+
+030 Register Readings
+0-\*
+J0010 Meter Register Id
+J0016 Reading Date & Time
+J0040 Register Reading
+J0044 MD Reset Date & Time
+J1013 Number of MD Resets
+J0045 Meter Reading Flag
+J1888 Reading Method
+
+so the first field after the 030 should be the "register reading" aka the serial number so Meter.register_id ... but in the file:
+
+030|01|20160228000000|88285.0|||T|N|
+
+it's just a two char number/letters... it's not matching a register_id... so wtf?
